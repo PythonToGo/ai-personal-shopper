@@ -1,0 +1,13 @@
+paths:
+  raw_data: "./data/raw"
+  processed_data: "./data/processed"
+  embeddings: "./data/embeddings"
+  faiss_index: "./data/faiss_index/index.faiss"
+
+models:
+  detector: "yolov8n.pt"   # or yolov8s.pt
+  classifier: "google/vit-base-patch16-224"
+  embedder: "openai/clip-vit-base-patch32"
+  segmenter: "vit_h"        # sam_vit_h model
+
+device: "auto"
