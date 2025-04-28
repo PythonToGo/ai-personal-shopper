@@ -19,11 +19,12 @@ class ObjectDetector:
     def extract_boxes(self, results):
         """ return coordinates and classes of detected objects"""
         detections = []
-        for result in results:
-            for box in result.boxes:
-                xyxy = box.xyxy.cpu().numpy().tolist()[0]
-                cls = int(box.cls.cpu().numpy().tolist())
-                conf = float(box.cls.cpu().numpy().tolist())
-                detections.append({"bbox": xyxy, "class": cls, "conf": conf})
+        for box in results[0].boxes:
+            x1, y1, x2, y2 = box.xyxy[0].tolist()
+            # xyxy = box.xyxy.cpu().numpy().tolist()[0]
+            conf = float(box.cls.cpu().item())
+            cls = int(box.cls.cpu().item())
+            
+            detections.append({"bbox": [x1, y1, x2, y2], "class": cls, "conf": conf})
         return detections
                 

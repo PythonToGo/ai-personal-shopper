@@ -12,7 +12,7 @@ import cv2
 def run_detection_and_segmentation(image_path):
     detector = ObjectDetector(model_path="yolov8n.pt")
     classifier = ImageClassifier(model_name="google/vit-base-patch16-224")
-    segmenter = Segmenter(model_type="vit_h", checkpoint_path="data/models/sam_vit_b_01ec64.pth")
+    segmenter = Segmenter(model_type="vit_b", checkpoint_path="data/models/sam_vit_b_01ec64.pth")
 
     results = detector.predict(image_path, conf=0.5)
     detections = detector.extract_boxes(results)
@@ -67,6 +67,6 @@ def run_embedding_and_recommendation():
         print(f"Match: {meta}, Distance: {dist}")
 
 if __name__ == "__main__":
-    image_path = "data/raw/sample.jpg"
+    image_path = "data/raw/tshirt.jpeg"
     run_detection_and_segmentation(image_path)
     run_embedding_and_recommendation()

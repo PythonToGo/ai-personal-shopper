@@ -6,7 +6,7 @@ from PIL import Image
 
 
 class Segmenter:
-    def __init__(self, model_type="vit_h", checkpoint="sam_vit_b_01ec64.pth", device=None):
+    def __init__(self, model_type="vit_b", checkpoint_path="sam_vit_b_01ec64.pth", device=None):
         if device is None:
             if torch.backends.mps.is_available():
                 device = "mps"
@@ -24,7 +24,7 @@ class Segmenter:
         masks = []
         for bbox in bbox_list:
             input_box = np.array(bbox).reshape(1, 4)    # [x1, y1, x2, y2]
-            input_box = torch.tensor(input_box, device=self.device)
+            input_box = torch.tensor(input_box, dtype=torch.float32, device=self.device)
 
             masks_, scores_, _ = self.predictor.predict_torch(
                 point_coords=None,
@@ -32,6 +32,6 @@ class Segmenter:
                 boxes=input_box,
                 multimask_output=False,
             )
-            mask = masks_[0][0].cpu_count().numpy()
+            mask = masks_[0][0].cpu().numpy()
             masks.append(mask)
         return masks
