@@ -6,7 +6,7 @@ from PIL import Image
 
 
 class Segmenter:
-    def __init__(self, model_type="vit_h", checkpoint="sam_vit_h.pth", device=None):
+    def __init__(self, model_type="vit_h", checkpoint="sam_vit_b_01ec64.pth", device=None):
         if device is None:
             if torch.backends.mps.is_available():
                 device = "mps"

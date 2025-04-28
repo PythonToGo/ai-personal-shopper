@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.pth.tar
+*.pth.tar.gz
+.DS_Store
+
+# model checkpoint
+data/models/*.pth
