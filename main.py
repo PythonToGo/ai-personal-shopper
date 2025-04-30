@@ -50,23 +50,32 @@ def run_embedding_and_recommendation():
 
     crop_dir = "data/processed/crops"
     image_paths = [os.path.join(crop_dir, f) for f in os.listdir(crop_dir) if f.endswith(".jpg")]
-    image_paths.sort()  # crop_0.jpg, crop_1.jpg 순서 보장
-
+    image_paths.sort()
+    
+    if len(image_paths) == 0:
+        print("No crops found! Exiting.")
+        return
     for img_path in image_paths:
         emb = embedder.get_embedding(img_path)
         recommender.add(emb, meta=img_path)
 
-    recommender.save()
+    if recommender.index.ntotal > 0:
+        os.makedirs(os.path.dirname(recommender.index_path), exist_ok=True)
+        recommender.save()
+        print("Faiss saved")
+    else:
+        print("No embeddings added.")
 
-    # 검색 테스트
-    query_emb = embedder.get_embedding(image_paths[0])
-    results = recommender.search(query_emb, topk=2)
+    # search test
+    if len(image_paths) >= 1:
+        query_emb = embedder.get_embedding(image_paths[0])
+        results = recommender.search(query_emb, topk=min(2, len(image_paths)))
 
     print("Top matches:")
     for meta, dist in results:
         print(f"Match: {meta}, Distance: {dist}")
 
 if __name__ == "__main__":
-    image_path = "data/raw/tshirt.jpeg"
+    image_path = "data/raw/ober.jpg"
     run_detection_and_segmentation(image_path)
     run_embedding_and_recommendation()
